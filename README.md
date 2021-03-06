@@ -1,1 +1,1 @@
-# file-operator
+This app operate server-side picture files.

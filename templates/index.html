@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Hello</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<div style="text-align: center;">
+		<h1>Display Pic -sample-</h1>
+	</div>
+	<div style="text-align: center;">
+		<img src="" id="picturePath_1" width="75%" height="auto" alt="Comming Soon" border="5px solid black">
+		<p id="pictureName_1"></p>
+		<img src="" id="picturePath_2" width="75%" height="auto" alt="Comming Soon" border="5px solid black">
+		<p id="pictureName_2"></p>
+		<img src="" id="picturePath_3" width="75%" height="auto" alt="Comming Soon" border="5px solid black">
+		<p id="pictureName_3"></p>
+	</div>
+	<div style="text-align: center;">
+		<input type="button" value="画像を表示する" id="btn_display_pics">
+	
+	<script type="text/javascript">
+		$(function(){
+			console.log('JQuery Start!');
+
+			// Pythonからデータを受け取る
+			let infos = {{ picture_infos | tojson }};
+			console.log('infos: ' + infos);
+			console.log('infos type: ' + typeof infos);
+
+			// 変数に格納 & '.jpg'を取り除く処理
+			let pic_name_1 = infos[0];
+			let pic_path_1 = '../../temp_1/' + pic_name_1;
+			pic_name_1 = pic_name_1.replace('.jpg', '');
+
+			let pic_name_2 = infos[1];
+			let pic_path_2 = '../../temp_2/' + pic_name_2;
+			pic_name_2 = pic_name_2.replace('.jpg', '');
+
+			let pic_name_3 = infos[2];
+			let pic_path_3 = '../../temp_3/' + pic_name_3;
+			pic_name_3 = pic_name_3.replace('.jpg', '');
+
+			console.log('pic_name_1: ' + pic_name_1);
+			console.log('pic_path_1: ' + pic_path_1);
+
+			$('#btn_display_pics').click(function(){
+				$('#picturePath_1').attr('src', pic_path_1);
+				$('#pictureName_1').text('カメラ1: ' + pic_name_1);
+
+				$('#picturePath_2').attr('src', pic_path_2);
+				$('#pictureName_2').text('カメラ2: ' + pic_name_2);
+
+				$('#picturePath_3').attr('src', pic_path_3);
+				$('#pictureName_3').text('カメラ3: ' + pic_name_3);
+			})
+
+			// ページをリロードするfunction
+			let reloads = function(){
+				window.location.reload();
+			}
+
+			// 一定間隔でリロードfunctionを実行する処理(第2引数: マイクロ秒)
+			//setInterval(reloads, 90000);
+		})
+		
+	</script>
+</body>
+</html>

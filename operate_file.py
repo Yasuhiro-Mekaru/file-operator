@@ -57,6 +57,11 @@ class Operate_file(object):
 		# pic_flagがFalseだったら、temp_pathからファイル名を取得する
 		path_obj = pathlib.Path(self.temp_path)
 		file_names = [p.name for p in path_obj.iterdir() if p.is_file()]
+
+		#temp_dirに画像ファイルが無い場合はそのまま空のListを返す
+		if not file_names:
+			print('temp_path file_names: ', file_names)
+			return file_names
 		
 		print('temp_path file_names[0]: ', file_names[0])
 		file_name = file_names[0]

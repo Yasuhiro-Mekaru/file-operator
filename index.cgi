@@ -1,11 +1,11 @@
-#!/home/show-new-world/.pyenv/versions/3.8.1_flask/bin/python
+#!/home/seedplus-cam/.pyenv/versions/3.8.1_flask/bin/python
 # -*- coding: utf-8 -*-
 
 from wsgiref.handlers import CGIHandler
 from app import app
 from sys import path
 
-path.insert(0, '/show-new-world/www/apps')
+path.insert(0, '/seedplus-cam/www/apps')
 
 
 class ProxyFit(object):
@@ -13,7 +13,7 @@ class ProxyFit(object):
 		self.app = app
 
 	def __call__(self, environ, start_response):
-		environ['SERVER_NAME'] = 'show-new-world.sakura.ne.jp'
+		environ['SERVER_NAME'] = 'seedplus-cam.sakura.ne.jp'
 		environ['SERVER_PORT'] = '80'
 		environ['REQUEST_METHOD'] = 'GET'
 		environ['SCRIPT_NAME'] = ''

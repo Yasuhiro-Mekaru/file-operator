@@ -1,5 +1,7 @@
 """ 新規画像がある時の処理を実行するfunctionを記述 """
 
+import re
+
 import operate_file
 
 
@@ -51,3 +53,64 @@ def exec_origin_picture(pic_instance, temp_path):
 
 	# 画像ファイルをtempフォルダにmoveする
 	pic_instance.move_picture(pic_name=renamed_pic_name)
+
+
+# 画像名のListをsortするfunction
+def sort_pictures(pictures):
+	#
+	print('Test pictures[0]: ', pictures[0])
+	print('Test pictures[0] type: ', type(pictures[0]))
+
+	result = re.findall(r'cam_1_([0-9]+)\.jpg', pictures[0])
+
+	print('Test result: ', result)
+	print('Test result type: ', type(result))
+	print('Test result[0]: ', result[0])
+	print('Test result[0] type: ', type(result[0]))
+
+	max_num = 0
+	max_idx = 0
+	for i, picture in enumerate(pictures):
+		# Listの先頭だけmax_numに画像番号を格納する
+		if i == 0:
+			str_nums = re.findall(r'cam_1_([0-9]+)\.jpg', picture)
+
+			if not str_nums:
+				continue
+
+			str_num = str_nums[0]
+			num = int(str_num)
+			max_num = num
+		else:
+			str_nums = re.findall(r'cam_1_([0-9]+)\.jpg', picture)
+
+			if not str_nums:
+				continue
+
+			str_num = str_nums[0]
+			num = int(str_num)
+			# 画像番号がmax_numより大きければ入れ替えし、index番号をmax_idxに格納する
+			if num > max_num:
+				max_num = num
+				max_idx = i
+
+	# # 画像番号が一番大きい画像名を格納
+	# latest_pic = pictures[max_idx]
+	# print('latest_pic: ', latest_pic)
+	# print('latest_pic type: ', type(latest_pic))
+	# return latest_pic
+	return max_idx
+
+
+
+
+
+
+
+
+
+
+
+
+
+

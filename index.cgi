@@ -1,4 +1,6 @@
-#!/home/seedplus-cam/.pyenv/versions/3.8.1_flask/bin/python
+#!/home/seedplus-cam/.pyenv/versions/3.8.1/envs/3.8.1_flask/bin/python
+
+# #!/home/seedplus-cam/.pyenv/versions/3.8.1_flask/bin/python
 # -*- coding: utf-8 -*-
 
 from wsgiref.handlers import CGIHandler

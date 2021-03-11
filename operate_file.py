@@ -5,6 +5,7 @@ import pathlib
 import shutil
 
 import change_time_format
+import execute_func
 
 
 class Operate_file(object):
@@ -34,6 +35,41 @@ class Operate_file(object):
 		file_names = [p.name for p in path_obj.iterdir() if p.is_file()]
 		print('get_pictures file_names: ', file_names)
 
+		#picture_pathに2つ以上画像ファイルが格納されている際の処理
+		if len(file_names) > 1:
+			print('len file_names: ', len(file_names))
+			#execute_funcにsortする処理を書いてここに呼び出す
+			index = execute_func.sort_pictures(pictures=file_names)
+			latest_pic = file_names.pop(index)
+
+			print('latest_pic: ', latest_pic)
+			print('len file_names: ', len(file_names))
+
+			for name in file_names:
+				if name == 'index.html':
+					continue
+
+				self.copy_picture(pic_name=name, is_origin=True)
+				# renamed = self.renamed_picture_name(pic_name=name)
+				origin_path = self.picture_path + name
+				# 画像の作成日時を取得する
+				path_obj = pathlib.Path(origin_path)
+				file_time = path_obj.stat().st_birthtime
+				# 日時のフォーマットを変更
+				time_obj = change_time_format.Change_time_format(file_time)
+				formatted_time = time_obj.change_to_str()
+				#新画像名
+				renamed = formatted_time + '.jpg'
+				# 新画像名のpath
+				renamed_path = self.picture_path + renamed
+				# renameする処理
+				os.rename(origin_path, renamed_path)
+				# renamedフォルダへcopy
+				self.copy_picture(pic_name=renamed, is_origin=False)
+				# removeする処理
+				os.remove(renamed_path)
+			# return latest_pic
+
 		return file_names
 
 
@@ -48,6 +84,14 @@ class Operate_file(object):
 		if pic_flag:
 			path_obj = pathlib.Path(self.picture_path)
 			file_names = [p.name for p in path_obj.iterdir() if p.is_file()]
+
+			# #picture_pathに2つ以上画像ファイルが格納されている際の処理
+			# if len(file_names) > 1:
+			# 	#execute_funcにsortする処理を書いてここに呼び出す
+			# 	latest_pic = execute_func.sort_pictures(pictures=file_names)
+
+			# 	return latest_pic
+
 
 			print('picture_path file_names[0]: ', file_names[0])
 			file_name = file_names[0]

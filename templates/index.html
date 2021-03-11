@@ -14,26 +14,31 @@
 	<div style="text-align: center;">
 		<img src="" id="picturePath_1" width="75%" height="auto" alt="Comming Soon" border="3px solid black">
 		<p id="pictureName_1"></p>
+	</div>
+	<div>
 		<img src="" id="picturePath_2" width="75%" height="auto" alt="Comming Soon" border="3px solid black">
 		<p id="pictureName_2"></p>
+	</div>
+	<div>
 		<img src="" id="picturePath_3" width="75%" height="auto" alt="Comming Soon" border="3px solid black">
 		<p id="pictureName_3"></p>
 	</div>
-	<div style="text-align: center;">
+	<!-- <div style="text-align: center;">
 		<p>画像を表示する時はこちらのボタンをタップしてください</p>
 		<input type="button" value="画像を表示する" id="btn_display_pics">
+	</div> -->
 	
 	<script type="text/javascript">
 		$(function(){
 			console.log('JQuery Start!');
 
-			let pic_name_1;
-			let pic_name_2;
-			let pic_name_3;
+			let pic_name_1 = '';
+			let pic_name_2 = '';
+			let pic_name_3 = '';
 
-			let pic_path_1;
-			let pic_path_2;
-			let pic_path_3;
+			let pic_path_1 = '';
+			let pic_path_2 = '';
+			let pic_path_3 = '';
 
 			// Pythonからデータを受け取る
 			let infos = {{ picture_infos | tojson }};
@@ -74,9 +79,9 @@
 			console.log('pic_name_1: ' + pic_name_1);
 			console.log('pic_path_1: ' + pic_path_1);
 
-			$('#btn_display_pics').click(function(){
-			});
-			
+			// $('#btn_display_pics').click(function(){
+			// });
+
 			$('#picturePath_1').attr('src', pic_path_1);
 			$('#pictureName_1').text('カメラ1: ' + pic_name_1);
 

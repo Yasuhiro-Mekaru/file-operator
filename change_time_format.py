@@ -20,8 +20,8 @@ class Change_time_format(object):
 			datetime: 画像ファイルの更新日時(datetime型)
 		"""
 		dt = datetime.datetime.fromtimestamp(self.file_time)
-		print('dt: ', dt)
-		print('type: ', type(dt))
+		# print('dt: ', dt)
+		# print('type: ', type(dt))
 
 		return dt
 
@@ -35,7 +35,7 @@ class Change_time_format(object):
 		time_format = '%Y-%m-%d_%H:%M'
 
 		str_time_format = self.dt.strftime(time_format)
-		print('str_time_format: ', str_time_format)
-		print('type: ', type(str_time_format))
+		# print('str_time_format: ', str_time_format)
+		# print('type: ', type(str_time_format))
 
 		return str_time_format

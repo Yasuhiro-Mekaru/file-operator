@@ -7,6 +7,7 @@ import shutil
 import change_time_format
 import execute_func
 
+# print('os cpu_count: ', os.cpu_count())
 
 class Operate_file(object):
 	""" 画像ファイルへの操作を定義したclass """
@@ -33,42 +34,42 @@ class Operate_file(object):
 		"""
 		path_obj = pathlib.Path(path)
 		file_names = [p.name for p in path_obj.iterdir() if p.is_file()]
-		print('get_pictures file_names: ', file_names)
 
 		#picture_pathに2つ以上画像ファイルが格納されている際の処理
 		if len(file_names) > 1:
-			print('len file_names: ', len(file_names))
-			#execute_funcにsortする処理を書いてここに呼び出す
-			index = execute_func.sort_pictures(pictures=file_names)
-			latest_pic = file_names.pop(index)
+			# 最新の画像ファイルindexを取得する
+			max_idx = execute_func.sort_pictures(pictures=file_names)
 
-			print('latest_pic: ', latest_pic)
-			print('len file_names: ', len(file_names))
+			# 最新の画像ファイルとindex.htmlをfile_namesListから取り出す
+			latest_pic = file_names.pop(max_idx)
+			new_file_list = [latest_pic]
 
 			for name in file_names:
+				# index.htmlファイルが混じっていたら削除する
 				if name == 'index.html':
-					continue
-
-				self.copy_picture(pic_name=name, is_origin=True)
-				# renamed = self.renamed_picture_name(pic_name=name)
-				origin_path = self.picture_path + name
-				# 画像の作成日時を取得する
-				path_obj = pathlib.Path(origin_path)
-				file_time = path_obj.stat().st_birthtime
-				# 日時のフォーマットを変更
-				time_obj = change_time_format.Change_time_format(file_time)
-				formatted_time = time_obj.change_to_str()
-				#新画像名
-				renamed = formatted_time + '.jpg'
-				# 新画像名のpath
-				renamed_path = self.picture_path + renamed
-				# renameする処理
-				os.rename(origin_path, renamed_path)
-				# renamedフォルダへcopy
-				self.copy_picture(pic_name=renamed, is_origin=False)
-				# removeする処理
-				os.remove(renamed_path)
-			# return latest_pic
+					os.remove(self.picture_path + 'index.html')
+				else:
+					# originalフォルダにcopyする
+					self.copy_picture(pic_name=name, is_origin=True)
+					# 画像の作成日時を取得する
+					origin_path = self.picture_path + name
+					path_obj = pathlib.Path(origin_path)
+					file_time = path_obj.stat().st_birthtime
+					# 日時のフォーマットを変更
+					time_obj = change_time_format.Change_time_format(file_time)
+					formatted_time = time_obj.change_to_str()
+					#　新画像名を定義する
+					renamed = formatted_time + '.jpg'
+					# 新画像名のpathを定義する
+					renamed_path = self.picture_path + renamed
+					# renameする処理
+					os.rename(origin_path, renamed_path)
+					# renamedフォルダへcopy
+					self.copy_picture(pic_name=renamed, is_origin=False)
+					# removeする処理
+					os.remove(renamed_path)
+			# 最新の画像ファイルだけをreturnする
+			return new_file_list
 
 		return file_names
 
@@ -84,19 +85,9 @@ class Operate_file(object):
 		if pic_flag:
 			path_obj = pathlib.Path(self.picture_path)
 			file_names = [p.name for p in path_obj.iterdir() if p.is_file()]
-
-			# #picture_pathに2つ以上画像ファイルが格納されている際の処理
-			# if len(file_names) > 1:
-			# 	#execute_funcにsortする処理を書いてここに呼び出す
-			# 	latest_pic = execute_func.sort_pictures(pictures=file_names)
-
-			# 	return latest_pic
-
-
-			print('picture_path file_names[0]: ', file_names[0])
 			file_name = file_names[0]
 
-			return file_names[0]
+			return file_name
 
 		# pic_flagがFalseだったら、temp_pathからファイル名を取得する
 		path_obj = pathlib.Path(self.temp_path)
@@ -104,12 +95,9 @@ class Operate_file(object):
 
 		#temp_dirに画像ファイルが無い場合はそのまま空のListを返す
 		if not file_names:
-			print('temp_path file_names: ', file_names)
 			return file_names
-		
-		print('temp_path file_names[0]: ', file_names[0])
-		file_name = file_names[0]
 
+		file_name = file_names[0]
 		return file_name
 
 
@@ -122,24 +110,18 @@ class Operate_file(object):
 		"""
 		# 元画像名のpath
 		origin_path = self.picture_path + pic_name
-		print('origin_path: ', origin_path)
 
 		# 画像の作成日時を取得する
 		path_obj = pathlib.Path(origin_path)
 		# file_time = path_obj.stat().st_ctime
 		file_time = path_obj.stat().st_birthtime
-		print('file_time: ', file_time)
-		print('type: ', type(file_time))
 
 		# 日時のフォーマットを変更
 		time_obj = change_time_format.Change_time_format(file_time)
 		formatted_time = time_obj.change_to_str()
-		print('formatted_time: ', formatted_time)
-		print('type: ', type(formatted_time))
 
 		# 新画像名のpath
 		renamed_path = self.picture_path + formatted_time + '.jpg'
-		print('renamed_path: ', renamed_path)
 
 		# renameする処理
 		os.rename(origin_path, renamed_path)
@@ -148,8 +130,6 @@ class Operate_file(object):
 		path_obj = pathlib.Path(self.picture_path)
 		renamed_names = [p.name for p in path_obj.iterdir() if p.is_file()]
 		renamed_name = renamed_names[0]
-		print('rename_picture name: ', renamed_name)
-		print('rename_picture name type: ', type(renamed_name))
 
 		return renamed_name
 
@@ -162,9 +142,6 @@ class Operate_file(object):
 		origin_path = self.picture_path + pic_name
 
 		moved_path = shutil.move(origin_path, self.temp_path)
-
-		print('moved_path: ', moved_path)
-		print('moved_path type: ', type(moved_path))
 
 
 	def copy_picture(self, pic_name, is_origin):

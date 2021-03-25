@@ -78,15 +78,28 @@ do
 			done
 		fi
 
-		# tempフォルダへの移動
+		# tempフォルダの画像ファイルの存在確認
+		if [ -n "$(ls ${TEMP_PATHS[$i]})" ]; then
+			# 画像ファイルのpathを取得
+			TEMP_FILE=${TEMP_PATHS[$i]}*.txt
+			echo $TEMP_FILE
+			# 画像ファイルをrename画像名格納フォルダにmove
+			mv $TEMP_FILE ${RENAMED_PATHS[$i]}
+		fi
+
+		#
+
+		# 画像ファイルのpathを取得
 		LATEST="${PICTURE_PATHS[$i]}/*.txt"
 		echo $LATEST
+		# original画像名格納フォルダにcopy
+		cp $LATEST ${ORIGINAL_PATHS[$i]}
 		# 画像ファイルの日時を取得する
 		DATE=`date -r $LATEST +"%Y-%m-%d_%H:%M"`
-		echo $DATE
-		# rename画像名格納フォルダへのpathを作成
+		#echo $DATE
+		# tempフォルダへのpathを作成
 		MOVED_DATE="${TEMP_PATHS[$i]}${DATE}.txt"
-		echo $MOVED_DATE
+		#echo $MOVED_DATE
 		# 画像ファイルをtempフォルダにmove
 		mv $LATEST $MOVED_DATE
 
